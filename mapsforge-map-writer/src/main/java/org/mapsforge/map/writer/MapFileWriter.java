@@ -287,6 +287,7 @@ public final class MapFileWriter {
     private static final short BITMAP_MAP_START_POSITION = 64;
     private static final short BITMAP_MAP_START_ZOOM = 32;
     private static final short BITMAP_PREFERRED_LANGUAGES = 16;
+    private static final short BITMAP_MAP_E7_ENCODING = 1;
 
     // bitmap flags for poi and way features
     private static final short BITMAP_HOUSENUMBER = 64;
@@ -425,6 +426,7 @@ public final class MapFileWriter {
         }
 
         infoByte |= BITMAP_CREATED_WITH;
+        infoByte |= BITMAP_MAP_E7_ENCODING;
 
         return infoByte;
     }
