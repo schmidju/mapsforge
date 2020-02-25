@@ -12,7 +12,7 @@ The map file consists of several sub-files, each storing the map objects for a d
 
 ## General remarks
 
-- All latitude and longitude coordinates are stored in microdegrees (degrees × 10<sup>6</sup>).
+- All latitude and longitude coordinates are stored in E6 (degrees × 10<sup>6</sup>) or E7 (degrees × 10<sup>7</sup>) (see file header flags).
 - Numeric fields with a fixed byte size are stored with *Big Endian* byte order.
 - Unsigned numeric fields with a variable byte encoding are marked with *`VBE-U` INT* and stored using [unsigned LEB128](https://en.wikipedia.org/wiki/LEB128#Unsigned_LEB128) format as follows:
   - the first bit of each byte is used for continuation info, the other seven bits for data.
@@ -66,7 +66,7 @@ To read the data of a specific tile in the sub-file, the position of the fixed-s
 |16||bounding box|geo coordinates of the bounding box in microdegrees as 4\*4-byte *INT*, in the order minLat, minLon, maxLat, maxLon|
 |2||tile size|the tile size in pixels (e.g. 256)|
 |variable||projection|defines the projection used to create this file as a string|
-|1||flags|<ul><li>1. bit (mask 0x80): flag for existence of debug information</li><li>2. bit (mask 0x40): flag for existence of the *map start position* field</li><li>3. bit (mask 0x20): flag for existence of the *start zoom level* field</li><li>4. bit (mask 0x10): flag for existence of the *language(s) preference* field</li><li>5. bit (mask 0x08): flag for existence of the *comment* field</li><li>6. bit (mask 0x04): flag for existence of the *created by* field</li><li>7.-8. bit (mask 0x02, 0x01): reserved for future use</li></ul>|
+|1||flags|<ul><li>1. bit (mask 0x80): flag for existence of debug information</li><li>2. bit (mask 0x40): flag for existence of the *map start position* field</li><li>3. bit (mask 0x20): flag for existence of the *start zoom level* field</li><li>4. bit (mask 0x10): flag for existence of the *language(s) preference* field</li><li>5. bit (mask 0x08): flag for existence of the *comment* field</li><li>6. bit (mask 0x04): flag for existence of the *created by* field</li><li>7. bit (mask 0x02): reserved for future use</li><li>8. bit (mask 0x01): flag for lat, lon encoded in E7 (instead of E6)</li></ul>|
 |8|yes|map start position|geo coordinate in microdegrees as 2\*4-byte *INT*, in the order lat, lon|
 |1|yes|start zoom level|zoom level of the map at first load|
 |variable|yes|language(s) preference|The preferred language(s) for names as defined in ISO 639-1 or ISO 639-2. This field is copied from the preferred-languages option of the map writer.|](|variable||zoom interval configuration|<ul><li>for each zoom interval:<ul><li>base zoom level as *BYTE*</li><li>minimal zoom level as *BYTE*</li><li>maximal zoom level as *BYTE*</li><li>absolute start position of the sub file as 8-byte *LONG*</li><li>size of the sub-file as 8-byte *LONG*</li></ul></li></ul>|) as string|
@@ -185,3 +185,4 @@ For double-delta encoding the lat-diff and lon-diff values describe the *change*
 |3|2012-03-18|<ul><li>Ways are stored as multiple segments</li><li>Ways can also have a house number</li><li>Removed obsolete data</li><li>Added *language preference* field to the header</li><li>Added *file size* field to the header</li><li>Added *start zoom level* field to the header</li><li>Added *created by* field to the header</li><li>Added a flag for single and double delta encoding</li><li>Reordered some fields</li><li>Removed some data type related limitations</li></ul>|
 |4|2015-11-25|<ul><li>Multilingual names storage</li></ul>|
 |5|2017-12-03|<ul><li>Variable tag values storage</li></ul>|
+|5|2020-02-25|<ul><li>Variable lat,long encoded in E6 or E7</li></ul>|
